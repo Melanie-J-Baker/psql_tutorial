@@ -1,5 +1,8 @@
 <html>
     <body>
-        <%= message %>
+        <%= title %>
+        <% users && users.map((user) => { %>
+            <li><%= user.username %></li>
+        <% }) %>
     </body>
 </html>

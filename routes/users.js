@@ -1,9 +1,17 @@
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
+const usersController = require("../controllers/usersController");
+const usersRouter = Router();
 
 /* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
+usersRouter.get("/", usersController.usersListGet);
 
-module.exports = router;
+/* GET form to add user */
+usersRouter.get("/new", usersController.createUserGet);
+
+/* POST user data to db" */
+usersRouter.post("/new", usersController.createUserPost);
+
+/* GET form to search for a user */
+usersRouter.get("/find-user", usersController.userSearchGet);
+
+module.exports = usersRouter;
