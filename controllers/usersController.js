@@ -10,14 +10,14 @@ async function usersListGet(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.render("error", {
+    res.status(500).render("error", {
       error: err,
     });
   }
 }
 
 async function createUserGet(req, res) {
-  // display HTML form with 1 username input text field which submits to next route
+  // Render HTML form with 1 username input text field which submits to next route
   res.render("createUser", {
     title: "Create user",
   });
@@ -30,7 +30,7 @@ async function createUserPost(req, res) {
     res.redirect("/users");
   } catch (err) {
     console.error(err);
-    res.render("error", {
+    res.status(500).render("error", {
       error: err,
     });
   }
@@ -52,7 +52,36 @@ async function userSearchGet(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.render("error", {
+    res.status(500).render("error", {
+      error: err,
+    });
+  }
+}
+
+async function deleteFormGet(req, res) {
+  // Render HTML form with 1 username input text field which submits to next route
+  res.render("deleteUser", {
+    title: "Delete user",
+  });
+}
+
+async function deleteUserPost(req, res) {
+  try {
+    const { username } = req.body;
+    console.log(username);
+    if (username) {
+      await db.deleteUser(username);
+      res.render("userDeleted", {
+        user: username,
+      });
+    } else {
+      res.render("userDeleted", {
+        user: "None provided!",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).render("error", {
       error: err,
     });
   }
@@ -63,4 +92,6 @@ module.exports = {
   createUserGet,
   createUserPost,
   userSearchGet,
+  deleteFormGet,
+  deleteUserPost,
 };

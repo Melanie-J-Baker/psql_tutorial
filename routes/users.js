@@ -14,4 +14,10 @@ usersRouter.post("/new", usersController.createUserPost);
 /* GET form to search for a user */
 usersRouter.get("/find-user", usersController.userSearchGet);
 
+/* GET form to delete a user */
+usersRouter.get("/delete", usersController.deleteFormGet);
+
+/* POST route to delete a user */
+usersRouter.post("/delete", usersController.deleteUserPost);
+
 module.exports = usersRouter;

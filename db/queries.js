@@ -5,7 +5,7 @@ async function getAllUsernames() {
     const { rows } = await pool.query("SELECT * FROM usernames");
     return rows;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 }
 
@@ -15,7 +15,7 @@ async function insertUsername(username) {
       username,
     ]);
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 }
 
@@ -25,9 +25,29 @@ async function getUsernames(searchQuery) {
       `SELECT * FROM usernames WHERE username ILIKE $1`,
       [`%${searchQuery}%`]
     );
-    return result;
+    return result.rows;
   } catch (err) {
-    console.error(err);
+    throw err;
+  }
+}
+
+async function deleteUser(username) {
+  if (!username || typeof username !== "string") {
+    throw new Error("Invalid username");
+  }
+
+  try {
+    const result = await pool.query(
+      "DELETE FROM usernames WHERE username = $1",
+      [username.trim()]
+    );
+    if (result.rowCount === 0) {
+      // No user deleted
+      throw new Error("No user found with given username");
+    }
+    return true;
+  } catch (err) {
+    throw err;
   }
 }
 
@@ -35,4 +55,5 @@ module.exports = {
   getAllUsernames,
   insertUsername,
   getUsernames,
+  deleteUser,
 };
